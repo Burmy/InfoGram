@@ -1,17 +1,36 @@
-db.collection("about")
-    .get()
-    .then((snapshot) => {
-        setupAbout(snapshot.docs);
-    });
-
 // listen for auth status changes
 auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log("user logged in: ", user);
+        db.collection("about")
+    .onSnapshot((snapshot) => {
+        setupAbout(snapshot.docs);
+        setupUI(user);
+    }).catch(err => {
+        console.log(err.message)
+    });
     } else {
-        console.log("user logged out");
+        setupUI()
+        setupAbout([]);
     }
 });
+
+// create new card
+const createForm =  document.querySelector('#create-form');
+createForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    db.collection('about').add({
+        title: createForm['title'].value,
+        content: createForm['content'].value
+    }).then(() => {
+        //close the modal and reset form
+        const modal = document.querySelector("#modal-create");
+        M.Modal.getInstance(modal).close();
+        createForm.reset();
+    }).catch(err => {
+        console.log(err.message)
+    })
+})
 
 // signup
 const signupForm = document.querySelector("#signup-form");
