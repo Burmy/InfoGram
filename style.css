@@ -1,0 +1,56 @@
+/* label color */
+.input-field label {
+    color: #000000;
+}
+/* label focus color */
+.input-field input:focus + label {
+    color: red !important;
+}
+/* label underline focus color */
+.input-field input:focus {
+    border-bottom: 1px solid red !important;
+    box-shadow: 0 1px 0 0 red !important;
+}
+
+/* label focus color */
+.input-field textarea:focus + label {
+    color: red !important;
+}
+/* label underline focus color */
+.input-field textarea:focus {
+    border-bottom: 1px solid red !important;
+    box-shadow: 0 1px 0 0 red !important;
+}
+
+:root {
+    font-size: 18px;
+    font-weight: 600;
+}
+.btn-large {
+    font-weight: 600;
+}
+.card {
+    border-radius: 3px;
+}
+.card-title {
+    font-size: 32px !important;
+    font-weight: 900 !important;
+    margin-bottom: 25px !important;
+}
+.thumb {
+    padding: 0px 20px 8px 24px;
+}
+
+.delete {
+    cursor: pointer;
+}
+#searchText {
+    background-color: white;
+    padding: 5px 30px 5px 30px;
+    border-bottom: red 2px solid;
+}
+
+#searchTextlabel {
+    background-color: white;
+    padding: 5px 30px 5px 30px;
+}

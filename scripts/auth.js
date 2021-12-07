@@ -9,35 +9,20 @@ adminForm.addEventListener("submit", (e) => {
     });
 });
 
-// listen for auth status changes
-// auth.onAuthStateChanged((user) => {
-//     if (user) {
-//         db.collection("about")
-//             .onSnapshot((snapshot) => {
-//                 setupAbout(snapshot.docs);
-//                 setupUI(user);
-//             })
-//             .catch((err) => {
-//                 console.log(err.message);
-//             });
-//     } else {
-//         setupUI();
-//         setupAbout([]);
-//     }
-// });
-
 auth.onAuthStateChanged((user) => {
     if (user) {
         user.getIdTokenResult().then((idTokenResult) => {
             user.admin = idTokenResult.claims.admin;
             setupUI(user);
         });
-        db.collection("about").onSnapshot(
-            (snapshot) => {
-                setupAbout(snapshot.docs);
-            },
-            (err) => console.log(err.message)
-        );
+        db.collection("about")
+            .orderBy("time", "desc")
+            .onSnapshot(
+                (snapshot) => {
+                    setupAbout(snapshot.docs);
+                },
+                (err) => console.log(err.message)
+            );
     } else {
         setupUI();
         setupAbout([]);
@@ -46,14 +31,15 @@ auth.onAuthStateChanged((user) => {
 
 // create new card
 const createForm = document.querySelector("#create-form");
+
 createForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
     db.collection("about")
         .add({
-            city: createForm["city"].value,
             name: createForm["name"].value,
-            phone: createForm["phone"].value,
+            title: createForm["title"].value,
+            content: createForm["content"].value,
+            time: firebase.firestore.Timestamp.now(),
         })
         .then(() => {
             //close the modal and reset form
