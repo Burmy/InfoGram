@@ -54,3 +54,18 @@
     background-color: white;
     padding: 5px 30px 5px 30px;
 }
+#searchText {
+    margin-left: -25px;
+}
+
+.title1 {
+    width: 200px;
+}
+
+.name1 {
+    width: 400px;
+    margin-top: -15px;
+}
+hr {
+    margin-top: 40px;
+}

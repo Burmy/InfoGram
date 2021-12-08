@@ -43,7 +43,9 @@
       <button class="btn-large waves-effect waves-light red" type="submit" name="action">Add as Admin
         <i class="material-icons right">send</i>
       </button>
+      
     </form>
+    
 
   <!-- SIGN UP MODAL -->
   <div id="modal-signup" class="modal">
@@ -91,20 +93,28 @@
       <h4>Create Card</h4><br />
       <form id="create-form">
 
-        <div class="input-field">
-          <input type="text" id="name" required></input>
-          <label for="name">Enter Name</label>
+        <div class="card">
+          <div class="card-content">
+             <div class="input-field title1">
+              <input type="text" id="title" required></input>
+              <label for="title">Enter Title</label>
+            </div>
+            <div class="input-field">
+              <textarea id="content" class="materialize-textarea" required></textarea>
+              <textarea id="content" class="materialize-textarea" required></textarea>
+              <textarea id="content" class="materialize-textarea" required></textarea>
+             <label for="content">Card Content</label>
+
+           </div>
+          </div>
+          <div class="thumb red-text name1" >
+            <div class="input-field">
+              <input type="text" id="name" required></input>
+              <label for="name">Enter Name</label>
+            </div>
+         </div>
         </div>
 
-        <div class="input-field">
-          <input type="text" id="title" required></input>
-          <label for="title">Enter Title</label>
-        </div>
-
-        <div class="input-field">
-          <textarea id="content" class="materialize-textarea" required></textarea>
-         <label for="content">Card Content</label>
-       </div>
 
         <button class="btn-large waves-effect waves-light red" type="submit" name="action">Create
         </button>
@@ -114,10 +124,7 @@
   </div>
 
 
-
-
-
-  <div class=" container search">
+  <div class="container search logged-in">
     <div class="input-field">
     <input id="searchText" onkeyup="Search()" type="text" />
     <label id="searchTextlabel">Search . . .</label>
@@ -128,8 +135,9 @@
   <!-- GUIDE LIST -->
   <div class="container" style="margin-top: 40px;">
       <div class="row about">
-      
+      </div>
   </div>
+
 
 
   <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>

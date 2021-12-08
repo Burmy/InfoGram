@@ -67,18 +67,19 @@ const setupAbout = (data) => {
         <div class="" style="margin: 60px auto; max-width: 600px;">
         <div class="card">
             <div class="card-content">
-            
                <span class="card-title">Sample Card</span>
                 <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
             </div>
-           <div class="card-action red-text">
-                <i class="material-icons">thumb_up</i>
-                <i class="material-icons">thumb_down</i>
+            <div class="thumb red-text" >
+            <p>Created by Sample</p>
            </div>
        </div>
    </div>
         
-   <h5 class="center-align" style="margin: 60px auto; ">Sign up to see kn !</h5>
+   <h5 class="center-align" style="margin: 60px auto; ">Sign up to see all the cards!</h5>
+
+   <h5 class="center-align" style="margin: 60px auto; ">Want to create your own cards? <br><a class="red-text"href="mailto:admin@infogram.com><span class="red-text">Contact Us!</span></a></h5>
+   
         
         `;
     }
