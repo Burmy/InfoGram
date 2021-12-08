@@ -35,7 +35,8 @@ const createForm = document.querySelector("#create-form");
 createForm.addEventListener("submit", (e) => {
     e.preventDefault();
     db.collection("about")
-        .add({
+        .doc("10")
+        .set({
             name: createForm["name"].value,
             title: createForm["title"].value,
             content: createForm["content"].value,
