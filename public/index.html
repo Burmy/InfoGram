@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>InfoGram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/9.6.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/9.6.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/9.6.0/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+        /* label color */
+        .input-field label {
+            color: #000000;
+        }
+
+        /* label focus color */
+        .input-field input:focus+label {
+            color: red !important;
+        }
+
+        /* label underline focus color */
+        .input-field input:focus {
+            border-bottom: 1px solid red !important;
+            box-shadow: 0 1px 0 0 red !important;
+        }
+
+        /* label focus color */
+        .input-field textarea:focus+label {
+            color: red !important;
+        }
+
+        /* label underline focus color */
+        .input-field textarea:focus {
+            border-bottom: 1px solid red !important;
+            box-shadow: 0 1px 0 0 red !important;
+        }
+
+        :root {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .btn-large {
+            font-weight: 600;
+        }
+
+        .card {
+            border-radius: 3px;
+        }
+
+        .card-title {
+            font-size: 32px !important;
+            font-weight: 900 !important;
+            margin-bottom: 25px !important;
+        }
+
+        .thumb {
+            padding: 0px 20px 8px 24px;
+        }
+
+        .delete {
+            cursor: pointer;
+        }
+
+        #searchText {
+            background-color: white;
+            padding: 5px 30px 5px 30px;
+            border-bottom: red 2px solid;
+        }
+
+        #searchTextlabel {
+            background-color: white;
+            padding: 5px 30px 5px 30px;
+        }
+
+        #searchText {
+            margin-left: -25px;
+        }
+
+        .title1 {
+            width: 200px;
+        }
+
+        .name1 {
+            width: 400px;
+            margin-top: -15px;
+        }
+
+        hr {
+            margin-top: 48px;
+        }
+
+        .hr {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body class="grey lighten-2">
+
+    <!-- NAVBAR -->
+    <nav class="z-depth-0 white">
+        <div class="nav-wrapper container">
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+                <li class="admin" style="display: none;">
+                    <a href="#" class="red-text modal-trigger" data-target="modal-create">Create Card</a>
+                </li>
+                <li class="logged-in" style="display: none; ">
+                    <a href="#" class="red-text" id="logout">Logout</a>
+                </li>
+                <li class="logged-out" style="display: none;">
+                    <a href="#" class="red-text modal-trigger" data-target="modal-login">Login</a>
+                </li>
+                <li class="logged-out" style="display: none;">
+                    <a href="#" class="red-text modal-trigger" data-target="modal-signup">Sign up</a>
+                </li>
+                </span>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ADMIN ACTIONS -->
+    <form class="center-align admin-actions admin" style="margin: 60px auto; max-width: 300px; display: none;">
+        <div class="input-field">
+            <input type="email" id="admin-email" required />
+            <label id="admin-email">User Email</label>
+        </div>
+        <button class="btn-large waves-effect waves-light red" name="action">Add as Admin
+            <i class="material-icons right">send</i>
+        </button>
+
+    </form>
+
+
+    <!-- SIGN UP MODAL -->
+    <div id="modal-signup" class="modal">
+        <div class="modal-content">
+            <h4>Sign up</h4><br />
+            <form id="signup-form">
+                <div class="input-field">
+                    <input type="email" id="signup-email" required />
+                    <label for="signup-email">Email address</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="signup-password" required />
+                    <label for="signup-password">Choose password</label>
+                </div>
+                <button class="btn-large waves-effect waves-light red" name="action">Sign up
+                </button>
+                <p class="error pink-text center-align"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content">
+            <h4>Login</h4><br />
+            <form id="login-form">
+                <div class="input-field">
+                    <input type="email" id="login-email" required />
+                    <label for="login-email">Email address</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="login-password" required />
+                    <label for="login-password">Your password</label>
+                </div>
+                <button class="btn-large waves-effect waves-light red" name="action">Login
+                </button>
+                <p class="error pink-text center-align"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- CREATE GUIDE MODAL -->
+    <div id="modal-create" class="modal">
+        <div class="modal-content">
+            <h4>Create Card</h4><br />
+            <form id="create-form">
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="input-field title1">
+                            <input type="text" id="title" required></input>
+                            <label for="title">Enter Title</label>
+                        </div>
+                        <div class="input-field">
+                            <textarea id="content" class="materialize-textarea" required></textarea>
+                            <hr class="hr">
+                            <hr>
+                            <label for="content">Card Content</label>
+
+                        </div>
+                    </div>
+                    <div class="thumb red-text name1">
+                        <div class="input-field">
+                            <input type="text" id="name" required></input>
+                            <label for="name">Enter Name</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button class="btn-large waves-effect waves-light red" type="submit" name="action">Create
+                </button>
+        </div>
+        </form>
+    </div>
+    </div>
+
+
+    <div class="container search logged-in">
+        <div class="input-field">
+            <input id="searchText" onkeyup="Search()" type="text" />
+            <label id="searchTextlabel">Search . . .</label>
+        </div>
+
+    </div>
+
+    <!-- GUIDE LIST -->
+    <div class="container" style="margin-top: 40px;">
+        <div class="row about">
+        </div>
+    </div>
+
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-functions.js"></script>
+    <script>
+
+        var config = {
+            apiKey: "AIzaSyBFGNznEDb7sxq1vwJp8w8ecT0dTNd38Fs",
+            authDomain: "csc-651.firebaseapp.com",
+            projectId: "csc-651",
+            storageBucket: "csc-651.appspot.com",
+            messagingSenderId: "394303981510",
+            appId: "1:394303981510:web:c76af54841219f6b0814c7",
+            measurementId: "G-2K94Y7FQE7",
+            databaseUrl: "https://csc-651-default-rtdb.firebaseio.com/"
+        };
+
+        firebase.initializeApp(config);
+
+        // make auth and firestore references
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+
+        // update firestore settings
+        db.settings({ timestampsInSnapshots: true });
+
+    </script>
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const adminForm = document.querySelector(".admin-actions");
+        adminForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const adminEmail = document.querySelector("#admin-email").value;
+            const addAdminRole = functions.httpsCallable("addAdminRole");
+            addAdminRole({ email: adminEmail }).then((result) => {
+                console.log(result);
+            });
+        });
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                user.getIdTokenResult().then((idTokenResult) => {
+                    user.admin = idTokenResult.claims.admin;
+                    setupUI(user);
+                });
+                db.collection("about")
+                    .orderBy("title")
+                    .onSnapshot(
+                        (snapshot) => {
+                            setupAbout(snapshot.docs);
+                        },
+                        (err) => console.log(err.message)
+                    );
+            } else {
+                setupUI();
+                setupAbout([]);
+            }
+        });
+
+        // create new card
+        const createForm = document.querySelector("#create-form");
+
+        createForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            db.collection("about")
+                .add({
+                    name: createForm["name"].value,
+                    title: createForm["title"].value,
+                    content: createForm["content"].value,
+                    // time: firebase.firestore.Timestamp.now(),
+                })
+                .then(() => {
+                    //close the modal and reset form
+                    const modal = document.querySelector("#modal-create");
+                    M.Modal.getInstance(modal).close();
+                    createForm.reset();
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        });
+
+        // signup
+        const signupForm = document.querySelector("#signup-form");
+        signupForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // get user info
+            const email = signupForm["signup-email"].value;
+            const password = signupForm["signup-password"].value;
+
+            // sign up the user
+            auth.createUserWithEmailAndPassword(email, password)
+
+                .then(() => {
+                    // close the signup modal & reset form
+                    const modal = document.querySelector("#modal-signup");
+                    M.Modal.getInstance(modal).close();
+                    signupForm.reset();
+                    signupForm.querySelector(".error").innerHTML = "";
+                })
+                .catch((err) => {
+                    signupForm.querySelector(".error").innerHTML = err.message;
+                });
+        });
+
+        // logout
+        const logout = document.querySelector("#logout");
+        logout.addEventListener("click", (e) => {
+            e.preventDefault();
+            auth.signOut();
+        });
+
+        // login
+        const loginForm = document.querySelector("#login-form");
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // get user info
+            const email = loginForm["login-email"].value;
+            const password = loginForm["login-password"].value;
+
+            // log the user in
+            auth.signInWithEmailAndPassword(email, password)
+                .then((cred) => {
+                    // close the signup modal & reset form
+                    const modal = document.querySelector("#modal-login");
+                    M.Modal.getInstance(modal).close();
+                    loginForm.reset();
+                    loginForm.querySelector(".error").innerHTML = "";
+                })
+                .catch((err) => {
+                    loginForm.querySelector(".error").innerHTML = err.message;
+                });
+        });
+
+
+
+
+    </script>
+    <script>
+        // DOM elements
+        const aboutList = document.querySelector(".about");
+        const loggedOutLinks = document.querySelectorAll(".logged-out");
+        const loggedInLinks = document.querySelectorAll(".logged-in");
+        const adminItems = document.querySelectorAll(".admin");
+
+        const setupUI = (user) => {
+            if (user) {
+                if (user.admin) {
+                    adminItems.forEach((item) => (item.style.display = "block"));
+                }
+                // account info
+                db.collection("user")
+                    .doc(user.uid)
+                    .get()
+                    .then((doc) => {
+                        const html = `
+      <div>Logged in as ${user.email}</div>
+      <div class="pink-text">${user.admin ? "Admin" : ""}</div>
+    `;
+                    });
+
+                // toggle UI elements
+                loggedInLinks.forEach((item) => (item.style.display = "block"));
+                loggedOutLinks.forEach((item) => (item.style.display = "none"));
+            } else {
+                // hide account info
+
+                // toggle UI elements
+                adminItems.forEach((item) => (item.style.display = "none"));
+                loggedInLinks.forEach((item) => (item.style.display = "none"));
+                loggedOutLinks.forEach((item) => (item.style.display = "block"));
+            }
+        };
+
+        // setup about
+        const setupAbout = (data) => {
+            if (data.length) {
+                let html = "";
+                data.forEach((doc) => {
+                    const id = doc.id;
+                    const about = doc.data();
+                    const li = `
+            
+            <div class="col s12 m6">
+                 <div class="card">
+                     <div class="card-content">
+                     
+                        <span class="card-title">${about.title}</span>
+                         <p>${about.content}</p>
+                     </div>
+                    <div class="thumb red-text" >
+                    <p>Created by ${about.name}</p>
+                    </div>
+                </div>
+            </div>
+            
+      `;
+                    html += li;
+                });
+                aboutList.innerHTML = html;
+            } else {
+                aboutList.innerHTML = `<h5 class="center-align" style="margin: 60px auto; ">Welcome to Infogram</h5>
+        
+        <div class="" style="margin: 60px auto; max-width: 600px;">
+        <div class="card">
+            <div class="card-content">
+               <span class="card-title">Sample Card</span>
+                <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="thumb red-text" >
+            <p>Created by Sample</p>
+           </div>
+       </div>
+   </div>
+        
+   <h5 class="center-align" style="margin: 60px auto; ">Sign up to see all the cards!</h5>
+
+   <h5 class="center-align" style="margin: 60px auto; ">Want to create your own cards? <br><a class="red-text"href="mailto:admin@infogram.com><span class="red-text">Contact Us!</span></a></h5>
+   
+        
+        `;
+            }
+        };
+        // setup materialize components
+        document.addEventListener("DOMContentLoaded", function () {
+            var modals = document.querySelectorAll(".modal");
+            M.Modal.init(modals);
+
+            var items = document.querySelectorAll(".collapsible");
+            M.Collapsible.init(items);
+        });
+
+
+        function Search() {
+            // User Input
+            let input = document.getElementById("searchText");
+
+            // Filter, makes search not case sensitive
+            let filter = input.value.toUpperCase();
+
+            // Individual item on list
+            let card = document.getElementsByClassName("card");
+
+            // Treats lists items like an array, where each item can be accessed through it's index
+            for (i = 0; i < card.length; i++) {
+                let item = card[i];
+
+                // Iterate over each list item to see if the value of the input, ignoring case, matches the inner text or inner html of the item.
+                let txtValue = item.textContent || item.innerText;
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    // Displays list items that are a match, and nothing if no match
+                    card[i].style.display = "";
+                } else {
+                    card[i].style.display = "none";
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>
